@@ -1,0 +1,30 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Myra"
+    },
+    {
+      "name": "Pearl Bailey",
+      "id": 2
+    },
+    {
+      "name": "Mario Johnston",
+      "id": 3
+    },
+    {
+      "name": "Dr. Tanya Sauer I",
+      "id": 4
+    },
+    {
+      "name": "Leroy DuBuque",
+      "id": 5
+    },
+    {
+      "name": "Lana Morissette",
+      "id": 6
+    }
+  ],
+  "albums": [],
+  "photos": []
+}
