@@ -1,51 +1,49 @@
-import React, {useEffect, useState} from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchUsers, addUser } from '../store'
-import Skeleton from './Skeleton'
-import Button from "./Button"
-import { useThunk } from './hooks/user-thunk'
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { fetchUsers, addUser } from "../store";
+import Skeleton from "./Skeleton";
+import Button from "./Button";
+import { useThunk } from "./hooks/user-thunk";
+import UsersListItem from "./UsersListItem";
 const UsersList = () => {
-  const { data } = useSelector((state) => state.users)
-  
-  const [doFetchUsers, isLoadingUser, isLoadingUserError] = useThunk(fetchUsers)
-  const [doCreateUser, isCreatingUser, isCreatingUserError] = useThunk(addUser)
-  
+  const { data } = useSelector((state) => state.users);
+
+  const [doFetchUsers, isLoadingUser, isLoadingUserError] =
+    useThunk(fetchUsers);
+  const [doCreateUser, isCreatingUser, isCreatingUserError] = useThunk(addUser);
+
   useEffect(() => {
-    doFetchUsers()
-  }, [])
+    doFetchUsers();
+  }, [doFetchUsers]);
 
   const handleAddUser = () => {
-    doCreateUser()
-}
+    doCreateUser();
+  };
 
+  let content;
   if (isLoadingUser) {
-    return <Skeleton times={6} className="w-full h-10"/>
+    content = <Skeleton times={6} className="w-full h-10" />;
+  } else if (isLoadingUserError) {
+    content = <div>Error Fetching Data</div>;
+  } else {
+    content = data.map((user) => {
+      return <UsersListItem key={user.id} user={user} />;
+    });
   }
 
-  if (isLoadingUserError) {
-    return <div>Error Fetching Data</div>
-  }
-
-  const renderedUsers = data.map((user) => {
-    return <div key={user.id} className='mb-2 border rounded'>
-      <div className='flex p-2 justify-between items-center cursor-pointer'>
-        {user.name}
-        </div>
-    </div>
-  })
   return (
     <div>
-      <div className='flex flex-row justify-between m-3'>
-        <h1 className='text-xl'>Users</h1>
-        {isCreatingUser ? "Creating User..." :
-          <Button onClick={handleAddUser}>
+      <div className="flex flex-row justify-between items-center m-3 ">
+        <h1 className="text-xl">Users</h1>
+
+        <Button loading={isCreatingUser} onClick={handleAddUser}>
           + Add User
-        </Button>}
+        </Button>
         {isCreatingUserError && "Error Creating User..."}
       </div>
-      {renderedUsers}
+      {content}
     </div>
-  )
-}
+  );
+};
 
-export default UsersList
+export default UsersList;
