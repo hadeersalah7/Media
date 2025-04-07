@@ -3,6 +3,9 @@ import Button from "./Button";
 import { useThunk } from "./hooks/user-thunk";
 import { deleteUser } from "../store";
 import { useDispatch } from "react-redux";
+import ExpandablePanel from "./ExpandablePanel";
+import AlbumsList from "./AlbumsList";
+
 const UsersListItem = ({ user }) => {
     const [doDeleteUser, isLoading, error] = useThunk(deleteUser);
     const dispatch = useDispatch();
@@ -10,18 +13,20 @@ const UsersListItem = ({ user }) => {
         // doDeleteUser(user.id);
         dispatch(deleteUser(user));
     };
+    const header = (
+        <>
+            <Button className="mr-3" loading={isLoading} onClick={handleDeleteUser}>
+                <GoTrashcan />
+            </Button>
+            {error && <div>Error Deleting User...</div>}
+            {user.name}
+        </>
+    );
     return (
-        <div className="mb-2 border rounded">
-            <div className="flex p-2 justify-between items-center cursor-pointer">
-                <div className="flex flex-row justify-between items-center">
-                    <Button className="mr-3" loading={isLoading} onClick={handleDeleteUser}>
-                        <GoTrashcan />
-                    </Button>
-                {error && <div>Error Deleting User...</div>}
-                {user.name}
-                </div>
-            </div>
-        </div>
+
+        <ExpandablePanel header={header}>
+            <AlbumsList user={user}/>
+        </ExpandablePanel>
     );
 };
 
